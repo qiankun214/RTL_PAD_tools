@@ -36,6 +36,33 @@ def reg(initial_value):
         return inter_wrapper
     return reg_wrapper
 
+def drive(initial_value):
+    def drive_wrapper(func):
+        def inter_wrapper(self):
+            drive_name = func.__name__
+            if self.mode == MODENAME.build:
+                self._build_value(drive_name,"reg",initial_value)
+                self.value_dict[drive_name] = inter_wrapper
+                self.drive_dict[drive_name] = func(self)
+            elif self.mode == MODENAME.init:
+                pass
+            elif self.mode == MODENAME.reg_value:
+                try:
+                    result = next(self.drive_dict[drive_name])
+                    self.board.set_value(drive_name,result)
+                except StopIteration as e:
+                    print("WARNING: cannot get data from drive {} at timestep {}".format(drive_name,self.time))
+                    # self.board.set_value(drive_name)
+            elif self.mode == MODENAME.reg_renew:
+                pass
+            elif self.mode == MODENAME.wire_value:
+                pass
+            elif self.mode == MODENAME.wire_renew:
+                pass
+            else:
+                raise ValueError("FATAL:mode undefined")
+        return inter_wrapper
+    return drive_wrapper
 # V = None
 
 class module(object):
@@ -46,7 +73,9 @@ class module(object):
         self.board = signalboard()
         self.value_dict = {}
         self.dtype_info = {}
+        self.drive_dict = {}
         self.value = None
+        self.time = 0
         # global V
         # V = self.value
         print("INFO:module build start")
@@ -64,16 +93,23 @@ class module(object):
 
     def __call__(self,times=10):
         # initial
-
+        self.time = 0
         for i in range(times):
             # before reg value
+            print("INFO: timestep {}".format(self.time))
             self.mode = MODENAME.reg_value
-            # global V
             self.value = self.board.generate_valueboard()
-            # print("INFO:get V {}".format(V))
             # reg value
             for name in self.value_dict.keys():
                 self.value_dict[name](self)
             # reg renew
             self.mode = MODENAME.reg_renew
             self.board.renew()
+            # wire value
+            self.mode = MODENAME.wire_value
+
+            # wire renew
+            self.mode = MODENAME.wire_renew
+
+            # post 
+            self.time += 1
