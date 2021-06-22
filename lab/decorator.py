@@ -15,6 +15,15 @@ class test(object):
     def test_a(self):
         print("my name is test_a")
 
+class test2(test):
+
+    def __init__(self) -> None:
+        super(test2,self).__init__()
+
+    @decorator
+    def test_b(self):
+        print("my name is test_b")
+        
 if __name__=='__main__':
     a = test()
     a.test_a()

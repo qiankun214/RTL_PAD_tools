@@ -1,3 +1,10 @@
+
+class valueboard(object):
+
+    def __init__(self) -> None:
+        super(valueboard,self).__init__()
+
+
 class signalboard(object):
 
     def __init__(self) -> None:
@@ -11,13 +18,17 @@ class signalboard(object):
         self.this_signal[name] = initial_value
         self.history_signel[name] = [initial_value]
 
-    def get_value(self,name):
-        return self.history_signel[name][-1]
-
     def set_value(self,name,value):
         self.this_signal[name] = value
+        # print("{} <- {}".format(name,value))
 
     def renew(self):
         for name in self.this_signal.keys():
             value = self.this_signal[name]
             self.history_signel[name].append(value)
+
+    def generate_valueboard(self):
+        board = valueboard()
+        for name in self.this_signal.keys():
+            setattr(board,name,self.this_signal[name])
+        return board
