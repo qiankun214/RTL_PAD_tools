@@ -21,15 +21,17 @@ class test(module):
     @drive(initial_value=1)
     def din_valid_reg(self):
         print("valid reg is ",self.value.din_valid_reg)
-        yield 1
-        print("valid reg is ",self.value.din_valid_reg)
         yield 2
         print("valid reg is ",self.value.din_valid_reg)
         yield 3
         print("valid reg is ",self.value.din_valid_reg)
         yield 4
+        print("valid reg is ",self.value.din_valid_reg)
+        yield 5
 
 
 if __name__=='__main__':
     a = test()
     a()
+    a.print_wave()
+    a.dump_wave("./test_wave.log")

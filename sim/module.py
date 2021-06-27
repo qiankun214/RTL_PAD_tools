@@ -11,7 +11,7 @@ class MODENAME(Enum):
     wire_value = 4
     wire_renew = 5
 
-
+from signal.waveboard import waveboard
 from signal.signalboard import signalboard 
 
 def reg(initial_value):
@@ -90,6 +90,16 @@ class module(object):
         else:
             self.dtype_info[name] = "wire"
         print("INFO:build value {},initial {}".format(name,initial_value))
+
+    def print_wave(self):
+        wave = waveboard(self.board)
+        wave.draw()
+        wave.print()
+
+    def dump_wave(self,path):
+        wave = waveboard(self.board)
+        wave.draw()
+        wave.dump(path)
 
     def __call__(self,times=10):
         # initial
