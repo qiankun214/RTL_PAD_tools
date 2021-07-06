@@ -20,7 +20,6 @@ class signalboard(object):
 
     def set_value(self,name,value):
         self.this_signal[name] = value
-        # print("{} <- {}".format(name,value))
 
     def renew(self):
         for name in self.this_signal.keys():
