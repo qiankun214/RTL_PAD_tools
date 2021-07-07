@@ -98,7 +98,44 @@ class up_fixed(fixed):
     def __repr__(self) -> str:
         return "{}({},{})".format(self.data / 2 ** self.decimal,self.width,self.decimal)
 
+class s_fixed(fixed):
+
+    def __init__(self, width, init) -> None:
+        super(s_fixed,self).__init__(width, init=init)
+
+    def as_width(self, width):
+        self.max_data = 2 ** (width - 1) - 1
+        self.min_data = - 2 ** (width - 1)
+        self.width = width
+        return copy.deepcopy(self)
+
+    def _overflow(self):
+        length = 2 ** (self.width - 1)
+        self.data += length * 2
+        sign,tmp = (self.data // length) % 2,self.data % length
+        # print(sign,tmp,length)
+        self.data = tmp - sign * length
+
+class sp_fixed(s_fixed):
+
+    def __init__(self, width, decimal, init) -> None:
+        super().__init__(width, init)
+        self.decimal = decimal
+        self.data = int(init * (2 ** decimal))
+
+    def __repr__(self) -> str:
+        return "{}({},{})".format(self.data / 2 ** self.decimal,self.width,self.decimal)
+
+
+# def overflow(min_data,max_data,data):
+#     length = (max_data - min_data + 1) //2
+#     data += length * 2
+#     sign,data = (data // length) % 2,data % length
+#     print(sign,data,length)
+#     data = data - sign * length
+#     return data
 if __name__ == '__main__':
-    a = up_fixed(8,5,1.29)
-    b = 5
-    print(a * b)
+    a = sp_fixed(8,4,-1.56)
+    print(a,a.data)
+    print(a * 5)
+    # print(overflow(-8,7,-13))
