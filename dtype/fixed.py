@@ -83,7 +83,22 @@ class fixed(object):
     def __repr__(self) -> str:
         return "{}({})".format(self.data,self.width)
 
+class u_fixed(fixed):
+
+    def __init__(self, width, init=0) -> None:
+        super(u_fixed,self).__init__(width, init=init)
+
+class up_fixed(fixed):
+
+    def __init__(self, width, decimal, init=0) -> None:
+        super(up_fixed,self).__init__(width, init=init)
+        self.decimal = decimal
+        self.data = int(init * (2 ** decimal))
+
+    def __repr__(self) -> str:
+        return "{}({},{})".format(self.data / 2 ** self.decimal,self.width,self.decimal)
+
 if __name__ == '__main__':
-    a = fixed(8,156)
+    a = up_fixed(8,5,1.29)
     b = 5
-    print(a < b,a > b,a <= b,a>= b,a == b,a != b)
+    print(a * b)

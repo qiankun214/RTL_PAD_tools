@@ -77,3 +77,5 @@ AttributeError: can't set attribute
 可以看出, 属性x是可读但不可写的.
 ————————————————
 > 版权声明：本文为CSDN博主「Daniel2333」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。原文链接：https://blog.csdn.net/weixin_35653315/article/details/78077253
+
+# 补码的溢出
